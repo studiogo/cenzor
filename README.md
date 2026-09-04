@@ -89,6 +89,32 @@ Pomiar możesz powtórzyć u siebie — [pomiar/WYNIKI.md](pomiar/WYNIKI.md) opi
 sposób liczenia, a `pomiar/pobierz.py` ściąga te same dokumenty z BIP-ów.
 Dokumentów nie ma w repozytorium: są w nich nazwiska prawdziwych ludzi.
 
+## Jak wypadamy na tle innego polskiego narzędzia
+
+Polskich narzędzi do tego samego jest kilka. Najdalej zaszedł
+[Parawan](https://github.com/karolpolikarp/parawan) i pod jednym względem bije nas
+na głowę: to jeden plik HTML, który otwierasz podwójnym kliknięciem. Bez instalacji,
+bez Pythona, bez modelu do pobrania — działa nawet na komputerze z firmowymi
+blokadami. Nasze narzędzie wymaga instalacji i pół gigabajta modelu języka.
+
+Przepuściliśmy oba przez te same 19 dokumentów i zmierzyliśmy tym samym przyrządem
+(4 września 2026, Parawan w wersji z wydań z tego dnia):
+
+| co mierzymy | Anonimizuj | Parawan |
+|---|---|---|
+| pełne nazwiska, 286 sztuk | 99,0% wyciętych | 82,5% wyciętych |
+| wszystko, co model języka uznał za osobę, 556 | 86,3% | 48,7% |
+| kod pocztowy | 100% | 100% |
+| PESEL (jeden w zestawie) | wycięty | został |
+
+Różnica bierze się z metody. Parawan rozpoznaje dane wzorcami i listami — dlatego
+mieści się w jednym pliku. My używamy modelu języka polskiego, więc łapiemy nazwisko
+w odmianie i takie, którego nie ma na żadnej liście. Na numerach o ustalonej budowie
+idziemy równo.
+
+Powtórz ten pomiar sam: `pomiar/pobierz.py` ściąga dokumenty, `pomiar/kontrola.py`
+liczy. Sposób liczenia opisuje [pomiar/WYNIKI.md](pomiar/WYNIKI.md).
+
 ## Czego to nie załatwia
 
 **Nie chroni przed rozpoznaniem po treści.** Wycięcie nazwisk nie znaczy, że nikt

@@ -74,3 +74,30 @@ w nim szumu.
 Bez pobierania czegokolwiek dzialaja sztuczne przyklady z `pomiar/przyklady/`.
 Numery PESEL, NIP i REGON sa w nich wygenerowane z poprawna suma kontrolna
 i nie naleza do nikogo.
+
+
+## Pomiar trzeci — 4 wrzesnia 2026, po naprawach
+
+Ten sam przyrzad, 19 dokumentow z obu poligonow (dokument 05 pominiety: serwer
+PARP oddaje uszkodzony PDF). Zmiany od poprzedniego pomiaru: dopisany paszport
+i ksiega wieczysta z sumami kontrolnymi, KRS rozpoznawany bez slowa "KRS" obok,
+zawezone wykrywanie telefonu.
+
+| wskaznik | nasze | Parawan 0.x (4 wrzesnia) |
+|---|---|---|
+| pelne nazwiska, 286 sztuk | 99,0% (przeszly 3) | 82,5% (przeszlo 50) |
+| wszystko, co model uznal za osobe, 556 | 86,3% | 48,7% |
+
+Z naszych trzech tylko "Estera Wilczynska" jest nazwiskiem; "B I P SUW"
+i "Malinowej Wiacie" to pomylki modelu. U Parawana wsrod 50 sa prawdziwe osoby.
+
+### Falszywe alarmy telefonu
+
+Przed naprawa: 463 podmiany oznaczone jako telefon, z czego przy slowie "tel",
+"fax" albo "kom" stalo 32. Reszta to daty ("05.05.2016"), kwoty ("5 898 310"),
+sygnatury spraw ("1331.35.2020") i pociete numery kont.
+Po naprawie: 19 podmian, okolo polowa to prawdziwe numery. Reszta to
+dziewieciocyfrowe kwoty, ktorych bez kontekstu nie da sie odroznic od numeru.
+
+Nadmiar wycinania nie jest wyciekiem, ale psuje wynik: model dostaje sprawozdanie
+budzetowe, w ktorym kwoty zamieniono na etykiety.
