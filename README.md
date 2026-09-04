@@ -110,6 +110,17 @@ Pomiar możesz powtórzyć u siebie — [pomiar/WYNIKI.md](pomiar/WYNIKI.md) opi
 sposób liczenia, a `pomiar/pobierz.py` ściąga te same dokumenty z BIP-ów.
 Dokumentów nie ma w repozytorium: są w nich nazwiska prawdziwych ludzi.
 
+## Sprawdź, czy nic nie jest zepsute
+
+```bash
+venv/bin/python -m pytest test/ -q
+```
+
+33 sprawdzenia: czy sumy kontrolne odsiewają podrobione numery, czy każdy rodzaj
+numeru znika ze zdania, czy kwota i data **zostają** nietknięte, i czy z pliku
+z kluczem da się odtworzyć oryginał co do znaku. Te same testy uruchamiają się
+same przy każdej zmianie w repozytorium.
+
 ## Jak wypadamy na tle innego polskiego narzędzia
 
 Polskich narzędzi do tego samego jest kilka. Najdalej zaszedł

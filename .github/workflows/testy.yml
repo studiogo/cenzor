@@ -1,0 +1,27 @@
+name: testy
+
+# Strażnik uruchamiany przy każdej zmianie: sprawdza, czy narzędzie nadal
+# wycina to, co ma wycinać, i nie rusza kwot ani dat.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  testy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instaluję biblioteki i model języka polskiego
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+          python -m spacy download pl_core_news_lg
+
+      - name: Uruchamiam testy
+        run: python -m pytest test/ -q
