@@ -23,9 +23,22 @@
   .podtytul{color:var(--szary);margin:0 0 22px}
   .lokalnie{display:inline-flex;align-items:center;gap:7px;background:var(--karta);
     border:1px solid var(--kreska);border-radius:99px;padding:5px 13px;
-    font-size:13px;color:var(--szary);margin-bottom:22px}
+    font-size:13px;color:var(--szary);margin-bottom:26px}
   .kropka{width:7px;height:7px;border-radius:50%;background:var(--zielony)}
   .karta{background:var(--karta);border:1px solid var(--kreska);border-radius:12px;padding:20px}
+
+  /* --- kroki --- */
+  .krok{margin-bottom:22px}
+  .krok.nieaktywny{opacity:.4}
+  .krok.nieaktywny .cialo-kroku{pointer-events:none;user-select:none}
+  .naglowek-kroku{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
+  .numer{flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+    background:var(--akcent);color:#fff;font-weight:700;font-size:15px;
+    display:flex;align-items:center;justify-content:center;align-self:center}
+  .krok.nieaktywny .numer{background:var(--szary)}
+  .krok.zrobiony .numer{background:var(--zielony);font-size:15px}
+  .tytul-kroku{font-size:17px;font-weight:600;margin:0}
+  .opis-kroku{margin:2px 0 0;color:var(--szary);font-size:14px}
 
   #upusc{border:2px dashed var(--kreska);border-radius:12px;padding:44px 20px;
     text-align:center;cursor:pointer;transition:.15s;background:var(--karta)}
@@ -34,14 +47,21 @@
   #upusc p{margin:0;color:var(--szary);font-size:14px}
   input[type=file]{display:none}
 
-  .pasek{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:18px 0}
-  .pasek .info{color:var(--szary);font-size:14px}
-  button{font:inherit;border:0;border-radius:9px;padding:10px 17px;cursor:pointer}
+  .wgrany{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wgrany .nazwa-pliku{font-weight:600}
+  .wgrany .info{color:var(--szary);font-size:14px}
+
+  button{font:inherit;border:0;border-radius:9px;padding:11px 18px;cursor:pointer}
   .glowny{background:var(--akcent);color:#fff;font-weight:600}
   .glowny:disabled{opacity:.45;cursor:default}
   .drugi{background:transparent;color:var(--akcent);border:1px solid var(--kreska)}
+  .maly{padding:7px 13px;font-size:14px}
 
-  .kolumny{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  .liczby{display:flex;gap:22px;flex-wrap:wrap;margin:0 0 16px}
+  .liczba b{display:block;font-size:21px}
+  .liczba span{font-size:13px;color:var(--szary)}
+
+  .kolumny{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:860px){.kolumny{grid-template-columns:1fr}}
   .kolumny h3{margin:0 0 4px;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
   .kolumny .opis{margin:0 0 10px;font-size:13px;color:var(--szary)}
@@ -66,9 +86,7 @@
     border:1px solid color-mix(in srgb,var(--czerwony) 35%,transparent);
     color:var(--czerwony);border-radius:9px;padding:14px;white-space:pre-wrap}
   .schowane{display:none}
-  .liczby{display:flex;gap:22px;flex-wrap:wrap;margin:2px 0 16px}
-  .liczba b{display:block;font-size:21px}
-  .liczba span{font-size:13px;color:var(--szary)}
+  .gotowe-znak{color:var(--zielony);font-size:14px;font-weight:600;margin-left:4px}
   footer{margin-top:34px;color:var(--szary);font-size:13px;border-top:1px solid var(--kreska);padding-top:16px}
 </style>
 </head>
@@ -78,54 +96,102 @@
   <p class="podtytul">Wytnij dane osobowe, zanim wyślesz plik do ChatGPT, Claude albo innego modelu.</p>
   <div class="lokalnie"><span class="kropka"></span> Wszystko dzieje się na tym komputerze. Żaden plik nie wychodzi do sieci.</div>
 
-  <div id="upusc" class="karta">
-    <h2>Przeciągnij tutaj plik albo kliknij, żeby wybrać</h2>
-    <p>PDF, Word (.docx), OpenDocument (.odt) albo zwykły tekst</p>
-    <input type="file" id="plik" accept=".pdf,.docx,.odt,.txt,.md,.csv">
-  </div>
+  <!-- KROK 1 -->
+  <section class="krok" id="krok1">
+    <div class="naglowek-kroku">
+      <div class="numer" id="numer1">1</div>
+      <div>
+        <p class="tytul-kroku">Wgraj plik</p>
+        <p class="opis-kroku">Umowa, protokół, pismo, notatka. Plik zostaje na Twoim komputerze.</p>
+      </div>
+    </div>
+    <div class="cialo-kroku">
+      <div id="upusc" class="karta">
+        <h2>Przeciągnij tutaj plik albo kliknij, żeby wybrać</h2>
+        <p>PDF, Word (.docx), OpenDocument (.odt) albo zwykły tekst</p>
+        <input type="file" id="plik" accept=".pdf,.docx,.odt,.txt,.md,.csv">
+      </div>
+      <div id="wgrany" class="karta wgrany schowane">
+        <span class="nazwa-pliku" id="nazwa-pliku"></span>
+        <span class="info" id="info"></span>
+        <button class="drugi maly" id="zmien">Wgraj inny plik</button>
+      </div>
+      <div id="pracuje" class="karta schowane" style="margin-top:12px">Czytam dokument i szukam danych osobowych…</div>
+      <div id="blad" class="blad schowane" style="margin-top:12px"></div>
+    </div>
+  </section>
 
-  <div id="pracuje" class="karta schowane" style="margin-top:16px">Czytam dokument i szukam danych osobowych…</div>
-  <div id="blad" class="blad schowane" style="margin-top:16px"></div>
+  <!-- KROK 2 -->
+  <section class="krok nieaktywny" id="krok2">
+    <div class="naglowek-kroku">
+      <div class="numer" id="numer2">2</div>
+      <div>
+        <p class="tytul-kroku">Sprawdź, co zniknie</p>
+        <p class="opis-kroku">Po lewej Twój dokument z zaznaczonymi danymi, po prawej wersja, która pojedzie do modelu.</p>
+      </div>
+    </div>
+    <div class="cialo-kroku">
+      <div class="liczby">
+        <div class="liczba"><b id="l-wystapien">—</b><span>wyciętych miejsc</span></div>
+        <div class="liczba"><b id="l-roznych">—</b><span>różnych rzeczy</span></div>
+        <div class="liczba"><b id="l-slow">—</b><span>słów w dokumencie</span></div>
+      </div>
 
-  <div id="wynik" class="schowane">
-    <div class="pasek">
+      <div class="kolumny">
+        <div class="karta">
+          <h3>Przed</h3>
+          <p class="opis">Twój dokument. Podświetlone jest to, co zniknie.</p>
+          <pre id="przed">Tu pojawi się Twój dokument, kiedy wgrasz plik.</pre>
+        </div>
+        <div class="karta">
+          <h3>Po</h3>
+          <p class="opis">Ta wersja jedzie do modelu. Nie ma w niej danych osobowych.</p>
+          <pre id="po">Tu pojawi się wersja oczyszczona.</pre>
+        </div>
+      </div>
+
+      <div class="karta" style="margin-top:16px">
+        <h3 style="margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.04em">Co zniknie</h3>
+        <div class="lista-oslona">
+          <table><thead><tr><th>rodzaj</th><th>treść</th><th style="text-align:right">ile razy</th></tr></thead>
+          <tbody id="lista"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KROK 3 -->
+  <section class="krok nieaktywny" id="krok3">
+    <div class="naglowek-kroku">
+      <div class="numer" id="numer3">3</div>
+      <div>
+        <p class="tytul-kroku">Pobierz plik oczyszczony</p>
+        <p class="opis-kroku">Ten plik wysyłasz do modelu. Zamiast nazwisk i numerów są w nim etykiety w rodzaju [OSOBA_1].</p>
+      </div>
+    </div>
+    <div class="cialo-kroku">
       <button class="glowny" id="pobierz-czysty">Pobierz plik oczyszczony</button>
+    </div>
+  </section>
+
+  <!-- KROK 4 -->
+  <section class="krok nieaktywny" id="krok4">
+    <div class="naglowek-kroku">
+      <div class="numer" id="numer4">4</div>
+      <div>
+        <p class="tytul-kroku">Pobierz plik z kluczem</p>
+        <p class="opis-kroku">Klucz zostaje u Ciebie. Dzięki niemu wstawisz prawdziwe nazwiska z powrotem do odpowiedzi modelu.</p>
+      </div>
+    </div>
+    <div class="cialo-kroku">
       <button class="drugi" id="pobierz-klucz">Pobierz plik z kluczem</button>
-      <span class="info" id="info"></span>
-    </div>
-
-    <div class="liczby">
-      <div class="liczba"><b id="l-wystapien">0</b><span>wyciętych miejsc</span></div>
-      <div class="liczba"><b id="l-roznych">0</b><span>różnych rzeczy</span></div>
-      <div class="liczba"><b id="l-slow">0</b><span>słów w dokumencie</span></div>
-    </div>
-
-    <div class="kolumny">
-      <div class="karta">
-        <h3>Przed</h3>
-        <p class="opis">Twój dokument. Podświetlone jest to, co zniknie.</p>
-        <pre id="przed"></pre>
-      </div>
-      <div class="karta">
-        <h3>Po</h3>
-        <p class="opis">Ta wersja jedzie do modelu. Nie ma w niej danych osobowych.</p>
-        <pre id="po"></pre>
-      </div>
-    </div>
-
-    <div class="karta" style="margin-top:16px">
-      <h3 style="margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.04em">Co zniknie</h3>
-      <div class="lista-oslona">
-        <table><thead><tr><th>rodzaj</th><th>treść</th><th style="text-align:right">ile razy</th></tr></thead>
-        <tbody id="lista"></tbody></table>
-      </div>
       <div class="ostrzezenie">
         <strong>Pliku z kluczem nie wysyłaj nigdzie.</strong>
         Zawiera przypisania w rodzaju <code>[OSOBA_1] = Jan Kowalski</code>. Razem z plikiem
         oczyszczonym odtwarza cały oryginał — trzymaj go tam, gdzie trzymasz sam dokument.
       </div>
     </div>
-  </div>
+  </section>
 
   <footer>
     Sprawdź wynik przed wysłaniem. Wycięcie nazwisk nie chroni przed rozpoznaniem po treści:
@@ -138,6 +204,15 @@ const $ = s => document.querySelector(s);
 let ostatni = null;
 
 function uciekaj(t){ return t.replace(/[&<>]/g, z => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[z])); }
+
+function odblokuj(nr, czy){
+  $('#krok'+nr).classList.toggle('nieaktywny', !czy);
+}
+function odhacz(nr, czy){
+  const k = $('#krok'+nr);
+  k.classList.toggle('zrobiony', czy);
+  $('#numer'+nr).textContent = czy ? '✓' : String(nr);
+}
 
 function podswietl(tekst, znika){
   let html = uciekaj(tekst);
@@ -160,10 +235,22 @@ function pobierz(nazwa, tresc, typ){
   a.download = nazwa; a.click(); URL.revokeObjectURL(a.href);
 }
 
-async function wyslij(plik){
-  $('#wynik').classList.add('schowane');
+function odStartu(){
+  ostatni = null;
+  [1,2,3,4].forEach(n => odhacz(n, false));
+  [2,3,4].forEach(n => odblokuj(n, false));
+  $('#upusc').classList.remove('schowane');
+  $('#wgrany').classList.add('schowane');
   $('#blad').classList.add('schowane');
+}
+
+async function wyslij(plik){
+  $('#blad').classList.add('schowane');
+  $('#upusc').classList.add('schowane');
+  $('#wgrany').classList.add('schowane');
   $('#pracuje').classList.remove('schowane');
+  [2,3,4].forEach(n => odblokuj(n, false));
+
   const bufor = await plik.arrayBuffer();
   let bin = ''; const bajty = new Uint8Array(bufor);
   for(let i=0;i<bajty.length;i+=8192) bin += String.fromCharCode(...bajty.subarray(i,i+8192));
@@ -173,20 +260,32 @@ async function wyslij(plik){
   });
   const w = await odp.json();
   $('#pracuje').classList.add('schowane');
-  if(w.blad){ $('#blad').textContent = w.blad; $('#blad').classList.remove('schowane'); return; }
+
+  if(w.blad){
+    $('#blad').textContent = w.blad;
+    $('#blad').classList.remove('schowane');
+    $('#upusc').classList.remove('schowane');
+    return;
+  }
 
   ostatni = w;
+  $('#nazwa-pliku').textContent = plik.name;
+  $('#info').textContent = 'rozpoznany format: ' + w.format.toUpperCase();
+  $('#wgrany').classList.remove('schowane');
+  odhacz(1, true);
+
   $('#l-wystapien').textContent = w.wystapien;
   $('#l-roznych').textContent = w.roznych;
   $('#l-slow').textContent = w.slow.toLocaleString('pl');
-  $('#info').textContent = plik.name + ' · rozpoznany format: ' + w.format.toUpperCase();
   $('#przed').innerHTML = podswietl(w.oryginal, w.znika);
   $('#po').innerHTML = pokazEtykiety(w.oczyszczony);
   $('#lista').innerHTML = w.znika.map(z =>
     `<tr><td><span class="typ">${uciekaj(z.typ)}</span></td>
      <td>${uciekaj(z.tekst.length>90 ? z.tekst.slice(0,90)+'…' : z.tekst)}</td>
      <td style="text-align:right">${z.ile}</td></tr>`).join('');
-  $('#wynik').classList.remove('schowane');
+
+  [2,3,4].forEach(n => odblokuj(n, true));
+  $('#krok2').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 const upusc = $('#upusc');
@@ -198,11 +297,18 @@ $('#plik').addEventListener('change', e => e.target.files[0] && wyslij(e.target.
   e.preventDefault(); upusc.classList.remove('nad'); }));
 upusc.addEventListener('drop', e => e.dataTransfer.files[0] && wyslij(e.dataTransfer.files[0]));
 
-$('#pobierz-czysty').addEventListener('click', () =>
-  ostatni && pobierz(ostatni.nazwa+'-anon.txt', ostatni.oczyszczony, 'text/plain'));
-$('#pobierz-klucz').addEventListener('click', () =>
-  ostatni && pobierz(ostatni.nazwa+'-anon-klucz.json',
-    JSON.stringify(ostatni.slownik, null, 2), 'application/json'));
+$('#zmien').addEventListener('click', () => { odStartu(); $('#plik').value=''; $('#plik').click(); });
+
+$('#pobierz-czysty').addEventListener('click', () => {
+  if(!ostatni) return;
+  pobierz(ostatni.nazwa+'-anon.txt', ostatni.oczyszczony, 'text/plain');
+  odhacz(3, true);
+});
+$('#pobierz-klucz').addEventListener('click', () => {
+  if(!ostatni) return;
+  pobierz(ostatni.nazwa+'-anon-klucz.json', JSON.stringify(ostatni.slownik, null, 2), 'application/json');
+  odhacz(4, true);
+});
 </script>
 </body>
 </html>

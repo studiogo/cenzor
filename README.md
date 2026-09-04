@@ -78,6 +78,13 @@ prac, więc narzędzie nie widziało tych dokumentów, gdy powstawały jego regu
 
 Przez oba zestawy przeszło jedno prawdziwe nazwisko na 287.
 
+Liczymy pełne nazwiska, czyli „imię plus nazwisko". Jest jeszcze miara szersza —
+wszystko, co model języka uzna za osobę — i tam wychodzi 91,6% oraz 84,2%.
+Ta miara bierze za osobę także nazwy ulic („Krasińskiego"), przymiotniki od
+powiatów („Pułtuskiego") i wyrazy urwane przez łamanie wierszy w PDF
+(„Departamen"). To nie są dane osobowe, więc im więcej takiego szumu
+w dokumencie, tym niżej ta liczba spada — i tym mniej mówi.
+
 Pomiar możesz powtórzyć u siebie — [pomiar/WYNIKI.md](pomiar/WYNIKI.md) opisuje
 sposób liczenia, a `pomiar/pobierz.py` ściąga te same dokumenty z BIP-ów.
 Dokumentów nie ma w repozytorium: są w nich nazwiska prawdziwych ludzi.
