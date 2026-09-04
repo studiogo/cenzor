@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anonimizuj — polskie dane osobowe znikają, zanim wyślesz plik do AI</title>
+<title>Cenzor — polskie dane osobowe znikają, zanim wyślesz plik do AI</title>
 <meta name="description" content="Wycina PESEL, NIP, nazwiska i 20 innych polskich danych z dokumentu, zanim trafi do ChatGPT czy Claude. Działa lokalnie, podmiany są odwracalne. Zmierzone na 324 057 słowach.">
-<meta property="og:title" content="Anonimizuj — polskie dane osobowe znikają, zanim wyślesz plik do AI">
+<meta property="og:title" content="Cenzor — polskie dane osobowe znikają, zanim wyślesz plik do AI">
 <meta property="og:description" content="Działa na Twoim komputerze. 98,9% pełnych nazwisk, 23 rodzaje numerów, podmiany odwracalne.">
 <meta property="og:type" content="website">
 <style>
@@ -81,8 +81,8 @@ footer a{color:var(--przygaszony)}
     numerów. Działa w całości na Twoim komputerze — żaden plik nie wychodzi do sieci.
     Po powrocie odpowiedzi wstawia prawdziwe dane z powrotem.</p>
     <div class="guziki">
-      <a class="guzik glowny" href="https://github.com/studiogo/anonimizuj-pl">Pobierz z GitHuba</a>
-      <a class="guzik" href="https://github.com/studiogo/anonimizuj-pl/blob/main/pomiar/WYNIKI.md">Zobacz pomiary</a>
+      <a class="guzik glowny" href="https://github.com/studiogo/cenzor">Pobierz z GitHuba</a>
+      <a class="guzik" href="https://github.com/studiogo/cenzor/blob/main/pomiar/WYNIKI.md">Zobacz pomiary</a>
     </div>
   </div>
 </header>
@@ -122,7 +122,7 @@ footer a{color:var(--przygaszony)}
   Wrocławskiej, gdzie nazwiska oznaczyli ludzie, a nie maszyna.</p>
 
   <p>Pomiar możesz powtórzyć u siebie — sposób liczenia opisuje
-  <a href="https://github.com/studiogo/anonimizuj-pl/blob/main/pomiar/WYNIKI.md">plik z wynikami</a>,
+  <a href="https://github.com/studiogo/cenzor/blob/main/pomiar/WYNIKI.md">plik z wynikami</a>,
   a dołączony skrypt ściąga te same dokumenty z BIP-ów. Dokumentów nie ma w repozytorium:
   są w nich nazwiska prawdziwych ludzi.</p>
 
@@ -133,7 +133,7 @@ footer a{color:var(--przygaszony)}
   przez te same 19 dokumentów i zmierzyliśmy tym samym przyrządem.</p>
 
   <table>
-    <tr><th>co mierzymy</th><th>Anonimizuj</th><th>Parawan</th></tr>
+    <tr><th>co mierzymy</th><th>Cenzor</th><th>Parawan</th></tr>
     <tr><td>pełne nazwiska, 286 sztuk</td><td>99,0% wyciętych</td><td>82,5% wyciętych</td></tr>
     <tr><td>wszystko, co model uznał za osobę, 556</td><td>86,3%</td><td>48,7%</td></tr>
     <tr><td>kod pocztowy</td><td>100%</td><td>100%</td></tr>
@@ -146,8 +146,8 @@ footer a{color:var(--przygaszony)}
 
   <h2>Jak zacząć</h2>
   <p>Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.</p>
-<pre class="polecenia">git clone https://github.com/studiogo/anonimizuj-pl.git
-cd anonimizuj-pl
+<pre class="polecenia">git clone https://github.com/studiogo/cenzor.git
+cd cenzor
 ./instaluj.sh</pre>
   <p>Potem okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:</p>
 <pre class="polecenia">venv/bin/python okno/serwer.py</pre>
@@ -185,7 +185,7 @@ cd anonimizuj-pl
 </main>
 
 <footer class="srodek">
-  <p><a href="https://github.com/studiogo/anonimizuj-pl">Kod i dokumentacja na GitHubie</a>
+  <p><a href="https://github.com/studiogo/cenzor">Kod i dokumentacja na GitHubie</a>
   · licencja MIT · pomiar z 4 września 2026</p>
 </footer>
 

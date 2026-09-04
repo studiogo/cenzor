@@ -1,9 +1,9 @@
-# Anonimizuj
+# Cenzor
 
-[![testy](https://github.com/studiogo/anonimizuj-pl/actions/workflows/testy.yml/badge.svg)](https://github.com/studiogo/anonimizuj-pl/actions/workflows/testy.yml)
+[![testy](https://github.com/studiogo/cenzor/actions/workflows/testy.yml/badge.svg)](https://github.com/studiogo/cenzor/actions/workflows/testy.yml)
 [![licencja MIT](https://img.shields.io/badge/licencja-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![wersja](https://img.shields.io/github/v/release/studiogo/anonimizuj-pl?label=wersja)](https://github.com/studiogo/anonimizuj-pl/releases)
+[![wersja](https://img.shields.io/github/v/release/studiogo/cenzor?label=wersja)](https://github.com/studiogo/cenzor/releases)
 [![nazwiska 98,9%](https://img.shields.io/badge/nazwiska-98%2C9%25-brightgreen.svg)](pomiar/WYNIKI.md)
 
 Wycina dane osobowe z dokumentu, zanim wyślesz go do ChatGPT, Claude albo innego
@@ -32,8 +32,8 @@ programować — jest okno w przeglądarce, do którego przeciągasz plik myszk�
 Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.
 
 ```bash
-git clone https://github.com/studiogo/anonimizuj-pl.git
-cd anonimizuj-pl
+git clone https://github.com/studiogo/cenzor.git
+cd cenzor
 ./instaluj.sh
 ```
 
@@ -138,7 +138,7 @@ blokadami. Nasze narzędzie wymaga instalacji i pół gigabajta modelu języka.
 Przepuściliśmy oba przez te same 19 dokumentów i zmierzyliśmy tym samym przyrządem
 (4 września 2026, Parawan w wersji z wydań z tego dnia):
 
-| co mierzymy | Anonimizuj | Parawan |
+| co mierzymy | Cenzor | Parawan |
 |---|---|---|
 | pełne nazwiska, 286 sztuk | 99,0% wyciętych | 82,5% wyciętych |
 | wszystko, co model języka uznał za osobę, 556 | 86,3% | 48,7% |
