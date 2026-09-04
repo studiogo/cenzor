@@ -1,5 +1,5 @@
-presidio-analyzer>=2.2
-spacy>=3.8
-pdfminer.six>=20240706
-python-docx>=1.1
-pytest>=8.0
+presidio-analyzer>=2.2.364
+spacy>=3.8.16
+pdfminer.six>=20260107
+python-docx>=1.2.0
+pytest>=9.1.1
