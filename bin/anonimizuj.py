@@ -45,6 +45,9 @@ ETYKIETY = {
     "PL_PESEL": "PESEL", "PL_NIP": "NIP", "PL_REGON": "REGON", "PL_DOWOD": "DOWOD",
     "PL_KOD": "KOD", "PL_KRS": "KRS", "PL_REJ": "NR_REJ",
     "PL_PASZPORT": "PASZPORT", "PL_KW": "KSIEGA_WIECZYSTA",
+    "PL_PWZ": "PWZ_LEKARZA", "PL_PRAWO_JAZDY": "PRAWO_JAZDY", "PL_ARIMR": "NR_PRODUCENTA",
+    "PL_BDO": "BDO", "PL_VIN": "VIN", "IMEI": "IMEI", "PL_KARTA_POBYTU": "KARTA_POBYTU",
+    "PL_RECEPTA": "RECEPTA", "PL_DZIALKA": "DZIALKA",
 }
 
 WZORCE_WLASNE = [
@@ -66,6 +69,23 @@ WZORCE_WLASNE = [
     ("PL_PASZPORT", re.compile(r"\b([A-Z]{2}\s?[0-9]{7})\b")),
     # Ksiega wieczysta: kod wydzialu, osiem cyfr, cyfra kontrolna.
     ("PL_KW", re.compile(r"\b([A-Z]{2}[0-9A-Z]{2}\s?/\s?[0-9]{8}\s?/\s?[0-9])\b")),
+    # Prawo wykonywania zawodu lekarza: siedem cyfr, pierwsza jest kontrolna (NIL).
+    ("PL_PWZ", re.compile(r"\b([1-9][0-9]{6})\b")),
+    # IMEI telefonu: pietnascie cyfr, algorytm Luhna.
+    ("IMEI", re.compile(r"\b([0-9]{15})\b")),
+    # Numer recepty: 22 cyfry (Narodowy Fundusz Zdrowia). Ciag tej dlugosci
+    # nie wystepuje w tekscie przypadkiem, wiec kotwica nie jest potrzebna.
+    ("PL_RECEPTA", re.compile(r"\b([0-9]{22})\b")),
+    # Identyfikator dzialki ewidencyjnej: kod TERYT gminy, numer obrebu, numer
+    # dzialki — np. 146501_1.0001.123. Ksztalt sam w sobie jest jednoznaczny.
+    ("PL_DZIALKA", re.compile(r"\b([0-9]{6}_[0-9]\.[0-9]{4}\.[0-9]+(?:/[0-9]+)?)\b")),
+    # Ponizsze nie maja sumy kontrolnej, wiec wymagaja slowa-kotwicy obok.
+    # Bez niej kazda liczba tej dlugosci bylaby falszywym trafieniem.
+    ("PL_VIN", re.compile(r"(?:VIN|nr\s*nadwozia|numer\s*nadwozia)[^A-Z0-9\n]{0,8}([A-HJ-NPR-Z0-9]{17})\b", re.I)),
+    ("PL_PRAWO_JAZDY", re.compile(r"(?:praw[oa]\s*jazdy)[^0-9\n]{0,20}([0-9]{9}|[0-9]{11}|[0-9]{14})\b", re.I)),
+    ("PL_ARIMR", re.compile(r"(?:producenta|ewidencji\s*producent\w*|numer\s*EP)[^0-9\n]{0,20}([0-9]{9})\b", re.I)),
+    ("PL_BDO", re.compile(r"(?:BDO)[^0-9\n]{0,12}([0-9]{9})\b", re.I)),
+    ("PL_KARTA_POBYTU", re.compile(r"(?:kart[ayę]\s*pobytu)[^A-Z0-9\n]{0,20}([A-Z]{2}\s?[0-9]{7})\b", re.I)),
     ("PL_DOWOD", re.compile(r"\b[A-Z]{3}\s?[0-9]{6}\b")),
     ("PL_REJ", re.compile(r"\b[A-Z]{2,3}\s?(?=[0-9A-Z]{4,5}\b)(?=[0-9A-Z]*[0-9])[0-9A-Z]{4,5}\b")),
     ("PL_KOD", re.compile(r"(?<![0-9-])[0-9]{2}-[0-9]{3}(?![0-9-])")),
@@ -190,7 +210,33 @@ def _telefon_z_kotwica(c):
     return 7 <= len(re.sub(r"\D", "", c)) <= 11
 
 
-SPRAWDZ_SUME = {"PL_NIP": _suma_nip, "PL_REGON": _suma_regon, "PL_PESEL": _suma_pesel,
+def _suma_pwz(c):
+    """Numer prawa wykonywania zawodu lekarza: siedem cyfr, pierwsza kontrolna.
+    Reszta to szesc cyfr mnozonych przez wagi 1-6, modulo 11 (zasady Naczelnej
+    Izby Lekarskiej). Numer nie zaczyna sie od zera."""
+    c = re.sub(r"\D", "", c)
+    if len(c) != 7 or c[0] == "0":
+        return False
+    return sum(int(c[i + 1]) * (i + 1) for i in range(6)) % 11 == int(c[0])
+
+
+def _luhn(c):
+    """Algorytm Luhna — sprawdza IMEI telefonu."""
+    c = re.sub(r"\D", "", c)
+    if len(c) != 15:
+        return False
+    suma = 0
+    for i, z in enumerate(reversed(c)):
+        n = int(z)
+        if i % 2 == 1:
+            n *= 2
+            if n > 9:
+                n -= 9
+        suma += n
+    return suma % 10 == 0
+
+
+SPRAWDZ_SUME = {"PL_PWZ": _suma_pwz, "IMEI": _luhn, "PL_NIP": _suma_nip, "PL_REGON": _suma_regon, "PL_PESEL": _suma_pesel,
                 "PHONE_NUMBER": _telefon_dziewiec_cyfr, "PHONE_KOTWICA": _telefon_z_kotwica,
                 "PL_PASZPORT": _suma_paszport, "PL_KW": _suma_kw}
 

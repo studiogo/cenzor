@@ -54,9 +54,20 @@ venv/bin/python bin/odwroc.py odpowiedz.txt umowa-anon-slownik.json
 
 ## Co rozpoznaje
 
-PESEL, NIP, REGON, KRS, numer konta, telefon, kod pocztowy, numer dowodu,
-numer rejestracyjny, adres e-mail, klucze do systemów — po budowie i cyfrze
-kontrolnej, więc bez zgadywania.
+**Sam się potwierdza cyfrą kontrolną** — PESEL, NIP, REGON, numer dowodu
+osobistego, paszport, numer księgi wieczystej, numer prawa wykonywania zawodu
+lekarza, IMEI telefonu. Tu nie ma zgadywania: numer, który nie przechodzi
+sprawdzenia, nie jest wycinany.
+
+**Rozpoznawany po kształcie** — KRS, kod pocztowy, numer rejestracyjny pojazdu,
+numer konta, adres e-mail, adres sieciowy, klucze do systemów, numer recepty,
+identyfikator działki ewidencyjnej.
+
+**Wycinany tylko przy słowie obok** — VIN (przy „VIN" albo „nr nadwozia"),
+prawo jazdy, numer producenta rolnego, numer BDO, karta pobytu, telefon (przy
+„tel", „fax", „kom" albo z przedrostkiem +48). Bez tego warunku każda kwota
+w sprawozdaniu budżetowym wyglądałaby jak numer telefonu — sprawdziliśmy to
+pomiarem i tak właśnie było.
 
 Nazwiska, nazwy firm, instytucji i miejscowości — modelem języka polskiego,
 który rozpoznaje je po tym, jak stoją w zdaniu, także w odmianie.
