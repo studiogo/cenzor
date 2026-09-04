@@ -89,6 +89,16 @@ prac, więc narzędzie nie widziało tych dokumentów, gdy powstawały jego regu
 
 Przez oba zestawy przeszło jedno prawdziwe nazwisko na 287.
 
+Sprawdziliśmy to jeszcze raz na cudzym materiale, żeby nikt nie zarzucił nam
+mierzenia własną miarką: **98,1% pełnych nazwisk** na części testowej korpusu
+KPWr Politechniki Wrocławskiej, gdzie nazwiska oznaczyli ludzie, a nie maszyna
+(blogi i teksty prasowe, 75 696 słów, licencja CC BY 3.0).
+
+Numery sprawdzamy osobno, bo prawdziwych PESEL-i nikt nie publikuje: budujemy je
+z policzoną cyfrą kontrolną i wkładamy w zdania z pism. **Wykrywanych 23 na 23
+rodzaje**, a na 323 tysiącach słów pism urzędowych, w których takich numerów nie
+ma, jeden fałszywy alarm.
+
 Liczymy pełne nazwiska, czyli „imię plus nazwisko". Jest jeszcze miara szersza —
 wszystko, co model języka uzna za osobę — i tam wychodzi 91,6% oraz 84,2%.
 Ta miara bierze za osobę także nazwy ulic („Krasińskiego"), przymiotniki od

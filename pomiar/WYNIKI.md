@@ -101,3 +101,42 @@ dziewieciocyfrowe kwoty, ktorych bez kontekstu nie da sie odroznic od numeru.
 
 Nadmiar wycinania nie jest wyciekiem, ale psuje wynik: model dostaje sprawozdanie
 budzetowe, w ktorym kwoty zamieniono na etykiety.
+
+
+## Pomiar czwarty — cudzy korpus, adnotacja ludzka (4 wrzesnia 2026)
+
+Zarzut, ktory mozna postawic pomiarom wyzej: liste prawdy buduje model spaCy,
+a tego samego modelu uzywa anonimizacja. Dlatego ten pomiar idzie na korpusie,
+w ktorym nazwiska oznaczyli ludzie: **KPWr — Korpus Jezyka Polskiego Politechniki
+Wroclawskiej**, czesc testowa, licencja CC BY 3.0
+(https://huggingface.co/datasets/clarin-pl/kpwr-ner).
+
+Material zupelnie inny niz nasz poligon: blogi i teksty prasowe zamiast pism
+urzedowych. 75 696 slow, 949 oznaczen osob, 642 rozne.
+
+| wskaznik | wynik |
+|---|---|
+| pelne nazwiska (dwa czlony), 373 rozne | 98,1% wycietych (przeszlo 7) |
+| wszystkie oznaczenia osob, 642 rozne | 94,5% wycietych (przeszlo 35) |
+
+Co przeszlo: nazwiska obce, ktorych model polskiego nie rozpoznaje ("Cab Calloway",
+"Eberhard Schlicker"), oraz pseudonimy i przezwiska, ktore czlowiek slusznie
+oznaczyl jako osoby, ale nazwiskami nie sa ("HenkvD", "Ciacho", "Kali", "Cesarz").
+
+Powtorzenie: `pomiar/korpus.py` po pobraniu pliku
+`data/kpwr-ner-n82-test.iob` z adresu wyzej.
+
+## Sprawdzian numerow (4 wrzesnia 2026)
+
+Prawdziwych numerow PESEL czy paszportu nikt nie publikuje i slusznie, wiec
+tutaj numery sa budowane: kazdy z policzona cyfra kontrolna, wlozony w zdanie
+takie, jakie spotyka sie w pismach. Skrypt: `pomiar/numery.py`.
+
+**Wykryte: 23 z 23 rodzajow.** PESEL, NIP, REGON, paszport, numer lekarza, IMEI,
+ksiega wieczysta, KRS (ze slowem i bez), dowod osobisty, kod pocztowy, konto,
+telefon (z kotwica i z +48), e-mail, VIN, prawo jazdy, numer producenta rolnego,
+BDO, karta pobytu, recepta, dzialka ewidencyjna, numer rejestracyjny.
+
+**Falszywe alarmy na 323 667 slowach pism urzedowych, w ktorych tych numerow nie ma:**
+jeden IMEI (przypadkowy ciag pietnastu cyfr przechodzacy algorytm Luhna).
+Pozostale jedenascie rodzajow: zero.
