@@ -41,6 +41,8 @@ Ostatni krok pobiera model języka polskiego (574 MB), więc chwilę to trwa.
 
 ## Pierwsze uruchomienie
 
+![Okno narzędzia: po lewej dokument z podświetlonymi danymi, po prawej ta sama treść z etykietami zamiast nazwisk, pod spodem lista tego, co znika](docs/obrazki/okno.jpg)
+
 Okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:
 
 ```bash
