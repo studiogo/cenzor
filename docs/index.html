@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anonimizuj — polskie dane osobowe znikają, zanim wyślesz plik do AI</title>
+<meta name="description" content="Wycina PESEL, NIP, nazwiska i 20 innych polskich danych z dokumentu, zanim trafi do ChatGPT czy Claude. Działa lokalnie, podmiany są odwracalne. Zmierzone na 324 057 słowach.">
+<meta property="og:title" content="Anonimizuj — polskie dane osobowe znikają, zanim wyślesz plik do AI">
+<meta property="og:description" content="Działa na Twoim komputerze. 98,9% pełnych nazwisk, 23 rodzaje numerów, podmiany odwracalne.">
+<meta property="og:type" content="website">
+<style>
+:root{
+  --tlo:#fbfbfa; --tekst:#1a1a18; --przygaszony:#5a5a54; --ramka:#e2e1dc;
+  --karta:#fff; --akcent:#1d6b4f; --akcent-tlo:#e8f3ee; --kod:#f4f3f0; --alarm:#8a3d2b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --tlo:#16171a; --tekst:#eceae5; --przygaszony:#a3a099; --ramka:#2c2e33;
+    --karta:#1d1f23; --akcent:#5cc79a; --akcent-tlo:#17342a; --kod:#22242a; --alarm:#e08b73;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--tlo); color:var(--tekst);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.srodek{max-width:760px;margin:0 auto;padding:0 24px}
+header{padding:72px 0 48px;border-bottom:1px solid var(--ramka)}
+h1{font-size:clamp(32px,6vw,46px);line-height:1.12;letter-spacing:-.02em;margin:0 0 16px}
+.lead{font-size:clamp(17px,2.4vw,20px);color:var(--przygaszony);margin:0 0 28px;max-width:56ch}
+h2{font-size:22px;letter-spacing:-.01em;margin:52px 0 14px}
+h3{font-size:16px;margin:28px 0 6px}
+p{margin:0 0 16px;max-width:64ch}
+a{color:var(--akcent)}
+.guziki{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.guzik{
+  display:inline-block;padding:11px 20px;border-radius:8px;text-decoration:none;
+  font-weight:600;font-size:15px;border:1px solid var(--ramka);color:var(--tekst);background:var(--karta);
+}
+.guzik.glowny{background:var(--akcent);border-color:var(--akcent);color:#fff}
+.przeplyw{
+  background:var(--karta);border:1px solid var(--ramka);border-radius:12px;
+  padding:20px;margin:32px 0;overflow-x:auto;
+}
+.przeplyw pre{margin:0;font:13px/1.9 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre}
+.szare{color:var(--przygaszony)}
+.zielone{color:var(--akcent);font-weight:600}
+.liczby{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:24px 0}
+.liczba{background:var(--karta);border:1px solid var(--ramka);border-radius:12px;padding:18px}
+.liczba b{display:block;font-size:28px;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.liczba span{font-size:13.5px;color:var(--przygaszony);line-height:1.45;display:block}
+table{border-collapse:collapse;width:100%;margin:18px 0;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--ramka)}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--przygaszony);font-weight:600}
+code{background:var(--kod);padding:2px 6px;border-radius:5px;font:13.5px ui-monospace,SFMono-Regular,Menlo,monospace}
+pre.polecenia{
+  background:var(--kod);border:1px solid var(--ramka);border-radius:10px;padding:16px 18px;
+  overflow-x:auto;font:13.5px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0 0 16px;
+}
+ul{padding-left:22px;margin:0 0 16px}
+li{margin-bottom:8px;max-width:64ch}
+.uwaga{
+  background:var(--akcent-tlo);border-left:3px solid var(--akcent);
+  border-radius:0 8px 8px 0;padding:14px 18px;margin:20px 0;
+}
+.uwaga p{margin:0}
+.granica{color:var(--alarm);font-weight:600}
+footer{margin-top:64px;padding:28px 0 56px;border-top:1px solid var(--ramka);color:var(--przygaszony);font-size:14px}
+footer a{color:var(--przygaszony)}
+.en{margin-top:36px;padding-top:24px;border-top:1px solid var(--ramka);color:var(--przygaszony);font-size:14.5px}
+.en p{max-width:64ch}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="srodek">
+    <h1>Dane osobowe znikają, zanim wyślesz plik do AI</h1>
+    <p class="lead">Wycina z dokumentu nazwiska, PESEL, NIP i dwadzieścia innych polskich
+    numerów. Działa w całości na Twoim komputerze — żaden plik nie wychodzi do sieci.
+    Po powrocie odpowiedzi wstawia prawdziwe dane z powrotem.</p>
+    <div class="guziki">
+      <a class="guzik glowny" href="https://github.com/studiogo/anonimizuj-pl">Pobierz z GitHuba</a>
+      <a class="guzik" href="https://github.com/studiogo/anonimizuj-pl/blob/main/pomiar/WYNIKI.md">Zobacz pomiary</a>
+    </div>
+  </div>
+</header>
+
+<main class="srodek">
+
+  <div class="przeplyw">
+<pre>"Umowa z Janem Kowalskim, PESEL 85010112345"
+        ↓
+"Umowa z [OSOBA_1], PESEL [PESEL_1]"     <span class="zielone">← to wysyłasz do modelu</span>
+[OSOBA_1] = Jan Kowalski                  <span class="szare">← to zostaje na Twoim dysku</span>
+        ↓
+"Jan Kowalski ma zapłacić do 15 marca"    <span class="zielone">← odpowiedź po podmianie z powrotem</span></pre>
+  </div>
+
+  <h2>Dla kogo</h2>
+  <p>Dla każdego, kto ma w dokumentach cudze dane i chce korzystać z AI, nie łamiąc RODO:
+  księgowość, kancelarie, kadry, biura rachunkowe, agencje. Nie musisz umieć programować —
+  jest okno w przeglądarce, do którego przeciągasz plik myszką.</p>
+
+  <h2>Ile z tego działa</h2>
+  <p>Zmierzone na <strong>324 057 słowach</strong> polskich pism urzędowych z Biuletynów
+  Informacji Publicznej, w dwóch osobnych zestawach. Drugi zestaw zebraliśmy
+  <strong>po</strong> zakończeniu prac, więc narzędzie nie widziało tych dokumentów,
+  gdy powstawały jego reguły.</p>
+
+  <div class="liczby">
+    <div class="liczba"><b>98,9%</b><span>pełnych nazwisk wyciętych z dokumentów, których narzędzie wcześniej nie widziało</span></div>
+    <div class="liczba"><b>100%</b><span>PESEL, NIP, REGON, numer konta, telefon, kod pocztowy</span></div>
+    <div class="liczba"><b>23 z 23</b><span>rodzaje polskich numerów rozpoznane; jeden fałszywy alarm na 323 tysiącach słów</span></div>
+    <div class="liczba"><b>20 z 20</b><span>dokumentów odtworzonych z powrotem co do znaku</span></div>
+  </div>
+
+  <p>Przez oba zestawy przeszło jedno prawdziwe nazwisko na 287. Sprawdziliśmy to
+  jeszcze raz na cudzym materiale, żeby nikt nie zarzucił nam mierzenia własną miarką:
+  <strong>98,1% pełnych nazwisk</strong> na części testowej korpusu KPWr Politechniki
+  Wrocławskiej, gdzie nazwiska oznaczyli ludzie, a nie maszyna.</p>
+
+  <p>Pomiar możesz powtórzyć u siebie — sposób liczenia opisuje
+  <a href="https://github.com/studiogo/anonimizuj-pl/blob/main/pomiar/WYNIKI.md">plik z wynikami</a>,
+  a dołączony skrypt ściąga te same dokumenty z BIP-ów. Dokumentów nie ma w repozytorium:
+  są w nich nazwiska prawdziwych ludzi.</p>
+
+  <h2>Jak wypada na tle innego polskiego narzędzia</h2>
+  <p>Najdalej zaszedł <a href="https://github.com/karolpolikarp/parawan">Parawan</a>
+  i pod jednym względem bije nas na głowę: to jeden plik HTML, który otwierasz podwójnym
+  kliknięciem. Bez instalacji, bez Pythona, bez modelu do pobrania. Przepuściliśmy oba
+  przez te same 19 dokumentów i zmierzyliśmy tym samym przyrządem.</p>
+
+  <table>
+    <tr><th>co mierzymy</th><th>Anonimizuj</th><th>Parawan</th></tr>
+    <tr><td>pełne nazwiska, 286 sztuk</td><td>99,0% wyciętych</td><td>82,5% wyciętych</td></tr>
+    <tr><td>wszystko, co model uznał za osobę, 556</td><td>86,3%</td><td>48,7%</td></tr>
+    <tr><td>kod pocztowy</td><td>100%</td><td>100%</td></tr>
+    <tr><td>PESEL (jeden w zestawie)</td><td>wycięty</td><td>został</td></tr>
+  </table>
+
+  <p>Różnica bierze się z metody. Parawan rozpoznaje dane wzorcami i listami — dlatego
+  mieści się w jednym pliku. Tu pracuje model języka polskiego, więc nazwisko w odmianie
+  i takie, którego nie ma na żadnej liście, też zostaje wycięte.</p>
+
+  <h2>Jak zacząć</h2>
+  <p>Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.</p>
+<pre class="polecenia">git clone https://github.com/studiogo/anonimizuj-pl.git
+cd anonimizuj-pl
+./instaluj.sh</pre>
+  <p>Potem okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:</p>
+<pre class="polecenia">venv/bin/python okno/serwer.py</pre>
+
+  <div class="uwaga">
+    <p>Okno słucha wyłącznie na Twoim komputerze i nie da się go wystawić na sieć.
+    To nie niedoróbka, tylko sedno narzędzia: w chwili, gdy stanęłoby na serwerze,
+    dokumenty zaczęłyby jechać przez sieć na cudzą maszynę.</p>
+  </div>
+
+  <h2>Czego to nie załatwia</h2>
+  <ul>
+    <li><span class="granica">Nie chroni przed rozpoznaniem po treści.</span> W protokole sesji
+    rady gminy nazwa gminy padła 56 razy; po oczyszczeniu została dwa razy — a jedno
+    wystarczy, żeby „Wójt [OSOBA_4]" miał tylko jedną możliwą wartość.</li>
+    <li><span class="granica">Skany są bezużyteczne.</span> PDF będący zdjęciem strony nie
+    ma w sobie tekstu. Program powie to wprost, zamiast udawać, że zadziałał.</li>
+    <li><span class="granica">Danych pacjentów nie anonimizuj.</span> Rejestrów medycznych
+    po prostu nie wyjmuj z systemu klienta.</li>
+    <li><span class="granica">Plik z kluczem to cały oryginał.</span> Razem z plikiem
+    oczyszczonym odtwarza dokument w całości. Nie wysyłaj go nigdzie.</li>
+  </ul>
+
+  <div class="en">
+    <h3>In English</h3>
+    <p><strong>Polish PII anonymizer that runs entirely on your machine.</strong> It removes
+    names, PESEL, NIP, REGON and 20 more Polish identifiers from a document before you send
+    it to an LLM, and puts the real values back into the answer. Checksums verify the
+    identifiers; a Polish language model catches inflected names. Measured on 324,057 words
+    of Polish public-administration documents: 98.9% of full names removed on documents the
+    tool had never seen, 100% on structured identifiers, 20/20 documents restored
+    character-for-character. MIT licence.</p>
+  </div>
+
+</main>
+
+<footer class="srodek">
+  <p><a href="https://github.com/studiogo/anonimizuj-pl">Kod i dokumentacja na GitHubie</a>
+  · licencja MIT · pomiar z 4 września 2026</p>
+</footer>
+
+</body>
+</html>

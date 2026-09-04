@@ -1,5 +1,11 @@
 # Anonimizuj
 
+[![testy](https://github.com/studiogo/anonimizuj-pl/actions/workflows/testy.yml/badge.svg)](https://github.com/studiogo/anonimizuj-pl/actions/workflows/testy.yml)
+[![licencja MIT](https://img.shields.io/badge/licencja-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![wersja](https://img.shields.io/github/v/release/studiogo/anonimizuj-pl?label=wersja)](https://github.com/studiogo/anonimizuj-pl/releases)
+[![nazwiska 98,9%](https://img.shields.io/badge/nazwiska-98%2C9%25-brightgreen.svg)](pomiar/WYNIKI.md)
+
 Wycina dane osobowe z dokumentu, zanim wyślesz go do ChatGPT, Claude albo innego
 modelu. Działa w całości na Twoim komputerze — żaden plik nie wychodzi do sieci.
 
