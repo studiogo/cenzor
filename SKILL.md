@@ -1,9 +1,9 @@
 ---
-name: anonimizuj
-description: Wycina dane osobowe z tekstu, zanim pojdzie do modelu w chmurze — nazwiska, firmy, miejsca, maile, telefony i klucze, takze te, ktorych nie ma na zadnej liscie. Podmiany zapisuje w slowniku, wiec da sie je odwrocic po powrocie tekstu. Use when the user says "zanonimizuj", "wytnij dane osobowe", "ukryj nazwiska", "przygotuj do wyslania", "usun wrazliwe dane z pliku", albo gdy do modelu ma pojsc plik z danymi klienta.
+name: cenzor
+description: Wycina dane osobowe z tekstu, zanim pojdzie do modelu w chmurze — nazwiska, firmy, miejsca, maile, telefony i klucze, takze te, ktorych nie ma na zadnej liscie. Podmiany zapisuje w slowniku, wiec da sie je odwrocic po powrocie tekstu. Use when the user says "zanonimizuj", "wytnij dane osobowe", "ukryj nazwiska", "przygotuj do wyslania", "usun wrazliwe dane z pliku", albo gdy do modelu ma pojsc plik z danymi klienta. Narzedzie nazywa sie Cenzor.
 ---
 
-# Anonimizuj
+# Cenzor
 
 Dziala lokalnie, nic nie wychodzi na zewnatrz. Rozpoznaje dane osobowe po budowie zdania
 (Presidio + spaCy), wiec lapie nazwiska i firmy, ktorych nigdy wczesniej nie widzialo.
