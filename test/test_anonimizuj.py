@@ -29,13 +29,15 @@ def wytnij(tekst, konfig):
 
 # --- Sumy kontrolne: numer sam potwierdza swoja poprawnosc ---
 
-@pytest.mark.parametrize("numer, poprawny", [
-    ("85010112345", True),    # prawdziwie zbudowany
-    ("85010112346", True),    # inna cyfra kontrolna, tez zgodna z suma? nie — patrz nizej
-])
-def test_pesel_ma_sume(numer, poprawny):
-    # Tylko jeden z jedenastu wariantow ostatniej cyfry przechodzi sume.
-    warianty = [numer[:10] + str(c) for c in range(10)]
+def test_pesel_przyjmuje_poprawny_odrzuca_podrobiony():
+    assert A._suma_pesel("85010112345")
+    assert not A._suma_pesel("85010112346")
+
+
+def test_pesel_tylko_jedna_cyfra_konczaca_jest_dobra():
+    """Suma kontrolna ma sens tylko wtedy, gdy z dziesieciu mozliwych
+    zakonczen numeru przechodzi dokladnie jedno."""
+    warianty = ["8501011234" + str(c) for c in range(10)]
     assert sum(A._suma_pesel(w) for w in warianty) == 1
 
 
