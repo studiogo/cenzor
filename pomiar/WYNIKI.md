@@ -1,0 +1,76 @@
+# Wyniki pomiaru — 4 wrzesnia 2026
+
+Jezyk: polski. Dwa niezalezne poligony, **324 057 slow** lacznie.
+Dokumentow nie ma w repozytorium — pobiera je `pobierz.py` z adresow w `ZRODLA.md`
+i `ZRODLA-poligon2.md`.
+
+- **Poligon 1** (97 082 slowa): pisma przetargowe, uchwaly sejmiku, sprawozdania
+  z wspolpracy z organizacjami. Na nim narzedzie bylo strojone.
+- **Poligon 2** (226 975 slow): wystapienia pokontrolne NIK, sprawozdania budzetowe,
+  umowy dotacji, uchwaly zarzadow wojewodztw. **Zebrany po zakonczeniu strojenia** —
+  narzedzie nie widzialo tych dokumentow, gdy powstawaly jego reguly.
+
+## Skutecznosc wycinania
+
+| kategoria | poligon 1 | poligon 2 |
+|---|---|---|
+| PESEL / NIP / REGON | 100% (15) | 100% (6) |
+| numer konta | 100% (1) | 100% (4) |
+| adres e-mail | 100% (13) | 100% (2) |
+| telefon | 100% (9) | brak w dokumentach |
+| kod pocztowy | 100% (30) | 100% (13) |
+| osoby | 100% (95) | 100% (122) |
+| firmy | 100% (40) | 100% (77) |
+| organizacje | 96,0% (303) | 97,2% (71) |
+
+W nawiasach liczba wystapien w dokumentach. Odwracalnosc: **10 z 10** na obu
+poligonach, tekst odtworzony co do znaku.
+
+## Pomiar kontrolny — bez wlasnej listy imion
+
+`pomiar.py` szuka osob po liscie imion, ktorej uzywa tez anonimizacja. Zeby nie
+mierzyc wlasnym przyrzadem, `kontrola.py` buduje liste prawdy inaczej: pyta
+model spaCy, co na oryginale uznaje za osobe. Podaje dwie liczby.
+
+| wskaznik | poligon 1 | poligon 2 |
+|---|---|---|
+| pelne nazwiska (imie + nazwisko) | 99,1% (106) | 98,9% (181) |
+| wszystko, co model wzial za osobe | 91,6% (179) | 84,2% (380) |
+
+Rozjazd miedzy wierszami bierze sie stad, ze model oznacza jako osobe rowniez
+nazwy ulic ("Krasinskiego", "Popieluszki"), przymiotniki od nazw powiatow
+("Mazowiecki", "Pultuskiego") i wyrazy urwane przez lamanie w PDF ("Departamen",
+"jacego"). To nie sa dane osobowe. Wskaznik ostry liczy tylko dwuczlonowe
+"imie + nazwisko" i on odpowiada na pytanie, ktore naprawde zadajemy.
+
+Przez oba poligony przeszlo **jedno prawdziwe nazwisko** — "Estera Wilczynska"
+w sprawozdaniu budzetowym gminy Ozimek, na 287 pelnych nazwisk lacznie.
+Dwa pozostale trafienia wskaznika ostrego to "B I P SUW" i "Malinowej Wiacie",
+czyli nie nazwiska.
+
+**Do cytowania publicznie: 98,9% na dokumentach, ktorych narzedzie nie widzialo
+w czasie strojenia.** Wskaznik szeroki podajemy obok, zeby bylo jasne, ile
+w nim szumu.
+
+## Czego to nie zalatwia
+
+1. **Nazwisko oddzielone od imienia granica komorki w tabeli.** Gdy PDF stawia
+   imie w jednym wierszu, a nazwisko w nastepnym, samotne nazwisko potrafi przejsc.
+2. **Rozpoznanie po kontekscie.** Wyciecie nazwisk nie chroni przed ustaleniem,
+   o kogo chodzi. W protokole sesji rady gminy nazwa gminy padla 56 razy;
+   po anonimizacji zostala dwa razy — a jedno wystarczy, by "Wojt [OSOBA_4]"
+   mial tylko jedna mozliwa wartosc.
+3. **Jeden byt, wiele etykiet.** Ta sama instytucja w roznych odmianach
+   ("Rada", "Rady Gminy", "Rada Gminy Wapno") dostaje rozne numery.
+4. **Dane pacjentow i rejestry medyczne** — tych nie anonimizujemy, tylko
+   nie wyjmujemy z systemu klienta.
+
+## Jak powtorzyc pomiar
+
+    python3 pomiar/pobierz.py poligon      # sciaga dokumenty z BIP-ow
+    python3 pomiar/pomiar.py poligon       # miara glowna
+    python3 pomiar/kontrola.py poligon     # miara niezalezna od listy imion
+
+Bez pobierania czegokolwiek dzialaja sztuczne przyklady z `pomiar/przyklady/`.
+Numery PESEL, NIP i REGON sa w nich wygenerowane z poprawna suma kontrolna
+i nie naleza do nikogo.

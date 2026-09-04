@@ -1,0 +1,11 @@
+Wniosek o wydanie zaswiadczenia
+
+Wnioskodawca: Katarzyna Zielinska, PESEL 85010112345,
+legitymujaca sie dowodem osobistym AGH 998877, zamieszkala 45-129 Opole,
+ul. Sienkiewicza 4/12. Telefon kontaktowy: 601-234-567.
+
+Wspolwnioskodawca: Marek Nowicki (PESEL: 92071522332),
+tel. 77 441-23-70, e-mail m.nowicki@example.pl
+
+Platnik: BETON-MAX sp. z o.o., NIP 5252248400, REGON 431019661,
+KRS 0000123456. Rachunek: 61 1090 1014 0000 0712 1981 2874.

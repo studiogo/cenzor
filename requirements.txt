@@ -1,0 +1,4 @@
+presidio-analyzer>=2.2
+spacy>=3.8
+pdfminer.six>=20240706
+python-docx>=1.1

@@ -1,0 +1,17 @@
+# biblioteki — stawia je instaluj.sh, nie trzymamy ich w repozytorium
+venv/
+__pycache__/
+*.pyc
+
+# TWOJE dane — nigdy do repozytorium
+konfiguracja.lokalna.json
+*-slownik.json
+*-anon.txt
+*-odtworzony.txt
+poligon*/
+pomiar/wynik-*.json
+pomiar/kontrola-*.json
+
+# robocze
+.kopia/
+.DS_Store

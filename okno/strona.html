@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anonimizuj dokument</title>
+<style>
+  :root{
+    --tlo:#f6f7f9; --karta:#fff; --tekst:#16191d; --szary:#5c6470;
+    --kreska:#dde1e7; --akcent:#1b5e9c; --zielony:#0a7a44; --czerwony:#b3261e;
+    --zolty:#8a6100; --zolte-tlo:#fff8e6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --tlo:#14171b; --karta:#1c2026; --tekst:#e8eaed; --szary:#9aa3ae;
+      --kreska:#2c323a; --akcent:#6aa9e0; --zielony:#4cc38a; --czerwony:#f2857c;
+      --zolty:#e0b25c; --zolte-tlo:#2a2418; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--tlo);color:var(--tekst);
+    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .strona{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-size:24px;margin:0 0 4px}
+  .podtytul{color:var(--szary);margin:0 0 22px}
+  .lokalnie{display:inline-flex;align-items:center;gap:7px;background:var(--karta);
+    border:1px solid var(--kreska);border-radius:99px;padding:5px 13px;
+    font-size:13px;color:var(--szary);margin-bottom:22px}
+  .kropka{width:7px;height:7px;border-radius:50%;background:var(--zielony)}
+  .karta{background:var(--karta);border:1px solid var(--kreska);border-radius:12px;padding:20px}
+
+  #upusc{border:2px dashed var(--kreska);border-radius:12px;padding:44px 20px;
+    text-align:center;cursor:pointer;transition:.15s;background:var(--karta)}
+  #upusc:hover,#upusc.nad{border-color:var(--akcent);background:color-mix(in srgb,var(--akcent) 6%,var(--karta))}
+  #upusc h2{margin:0 0 6px;font-size:17px;font-weight:600}
+  #upusc p{margin:0;color:var(--szary);font-size:14px}
+  input[type=file]{display:none}
+
+  .pasek{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:18px 0}
+  .pasek .info{color:var(--szary);font-size:14px}
+  button{font:inherit;border:0;border-radius:9px;padding:10px 17px;cursor:pointer}
+  .glowny{background:var(--akcent);color:#fff;font-weight:600}
+  .glowny:disabled{opacity:.45;cursor:default}
+  .drugi{background:transparent;color:var(--akcent);border:1px solid var(--kreska)}
+
+  .kolumny{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  @media(max-width:860px){.kolumny{grid-template-columns:1fr}}
+  .kolumny h3{margin:0 0 4px;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+  .kolumny .opis{margin:0 0 10px;font-size:13px;color:var(--szary)}
+  pre{margin:0;white-space:pre-wrap;word-break:break-word;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    max-height:46vh;overflow:auto;background:var(--tlo);border:1px solid var(--kreska);
+    border-radius:8px;padding:13px}
+  mark{background:color-mix(in srgb,var(--zolty) 30%,transparent);color:inherit;
+    border-radius:3px;padding:0 2px}
+  .etykieta{color:var(--akcent);font-weight:600}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--kreska)}
+  th{color:var(--szary);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .typ{display:inline-block;background:var(--tlo);border:1px solid var(--kreska);
+    border-radius:5px;padding:1px 7px;font-size:12px;font-family:ui-monospace,monospace}
+  .lista-oslona{max-height:34vh;overflow:auto}
+
+  .ostrzezenie{background:var(--zolte-tlo);border:1px solid color-mix(in srgb,var(--zolty) 40%,transparent);
+    border-radius:9px;padding:13px 15px;margin-top:14px;font-size:14px}
+  .ostrzezenie strong{color:var(--zolty)}
+  .blad{background:color-mix(in srgb,var(--czerwony) 10%,var(--karta));
+    border:1px solid color-mix(in srgb,var(--czerwony) 35%,transparent);
+    color:var(--czerwony);border-radius:9px;padding:14px;white-space:pre-wrap}
+  .schowane{display:none}
+  .liczby{display:flex;gap:22px;flex-wrap:wrap;margin:2px 0 16px}
+  .liczba b{display:block;font-size:21px}
+  .liczba span{font-size:13px;color:var(--szary)}
+  footer{margin-top:34px;color:var(--szary);font-size:13px;border-top:1px solid var(--kreska);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="strona">
+  <h1>Anonimizuj dokument</h1>
+  <p class="podtytul">Wytnij dane osobowe, zanim wyślesz plik do ChatGPT, Claude albo innego modelu.</p>
+  <div class="lokalnie"><span class="kropka"></span> Wszystko dzieje się na tym komputerze. Żaden plik nie wychodzi do sieci.</div>
+
+  <div id="upusc" class="karta">
+    <h2>Przeciągnij tutaj plik albo kliknij, żeby wybrać</h2>
+    <p>PDF, Word (.docx), OpenDocument (.odt) albo zwykły tekst</p>
+    <input type="file" id="plik" accept=".pdf,.docx,.odt,.txt,.md,.csv">
+  </div>
+
+  <div id="pracuje" class="karta schowane" style="margin-top:16px">Czytam dokument i szukam danych osobowych…</div>
+  <div id="blad" class="blad schowane" style="margin-top:16px"></div>
+
+  <div id="wynik" class="schowane">
+    <div class="pasek">
+      <button class="glowny" id="pobierz-czysty">Pobierz plik oczyszczony</button>
+      <button class="drugi" id="pobierz-klucz">Pobierz plik z kluczem</button>
+      <span class="info" id="info"></span>
+    </div>
+
+    <div class="liczby">
+      <div class="liczba"><b id="l-wystapien">0</b><span>wyciętych miejsc</span></div>
+      <div class="liczba"><b id="l-roznych">0</b><span>różnych rzeczy</span></div>
+      <div class="liczba"><b id="l-slow">0</b><span>słów w dokumencie</span></div>
+    </div>
+
+    <div class="kolumny">
+      <div class="karta">
+        <h3>Przed</h3>
+        <p class="opis">Twój dokument. Podświetlone jest to, co zniknie.</p>
+        <pre id="przed"></pre>
+      </div>
+      <div class="karta">
+        <h3>Po</h3>
+        <p class="opis">Ta wersja jedzie do modelu. Nie ma w niej danych osobowych.</p>
+        <pre id="po"></pre>
+      </div>
+    </div>
+
+    <div class="karta" style="margin-top:16px">
+      <h3 style="margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.04em">Co zniknie</h3>
+      <div class="lista-oslona">
+        <table><thead><tr><th>rodzaj</th><th>treść</th><th style="text-align:right">ile razy</th></tr></thead>
+        <tbody id="lista"></tbody></table>
+      </div>
+      <div class="ostrzezenie">
+        <strong>Pliku z kluczem nie wysyłaj nigdzie.</strong>
+        Zawiera przypisania w rodzaju <code>[OSOBA_1] = Jan Kowalski</code>. Razem z plikiem
+        oczyszczonym odtwarza cały oryginał — trzymaj go tam, gdzie trzymasz sam dokument.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Sprawdź wynik przed wysłaniem. Wycięcie nazwisk nie chroni przed rozpoznaniem po treści:
+    jeśli w dokumencie została nazwa miejscowości albo nietypowa sprawa, ktoś może domyślić się reszty.
+  </footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+let ostatni = null;
+
+function uciekaj(t){ return t.replace(/[&<>]/g, z => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[z])); }
+
+function podswietl(tekst, znika){
+  let html = uciekaj(tekst);
+  const frazy = [...new Set(znika.map(z => z.tekst))].sort((a,b)=>b.length-a.length).slice(0,400);
+  for(const f of frazy){
+    if(f.trim().length < 2) continue;
+    const wz = new RegExp(uciekaj(f).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g');
+    html = html.replace(wz, m => '<mark>'+m+'</mark>');
+  }
+  return html;
+}
+
+function pokazEtykiety(tekst){
+  return uciekaj(tekst).replace(/\[[A-ZĄĆĘŁŃÓŚŹŻ_]+_\d+\]/g, m => '<span class="etykieta">'+m+'</span>');
+}
+
+function pobierz(nazwa, tresc, typ){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([tresc], {type: typ+';charset=utf-8'}));
+  a.download = nazwa; a.click(); URL.revokeObjectURL(a.href);
+}
+
+async function wyslij(plik){
+  $('#wynik').classList.add('schowane');
+  $('#blad').classList.add('schowane');
+  $('#pracuje').classList.remove('schowane');
+  const bufor = await plik.arrayBuffer();
+  let bin = ''; const bajty = new Uint8Array(bufor);
+  for(let i=0;i<bajty.length;i+=8192) bin += String.fromCharCode(...bajty.subarray(i,i+8192));
+  const odp = await fetch('/przetworz', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({nazwa: plik.name, dane: btoa(bin), jezyk:'pl'})
+  });
+  const w = await odp.json();
+  $('#pracuje').classList.add('schowane');
+  if(w.blad){ $('#blad').textContent = w.blad; $('#blad').classList.remove('schowane'); return; }
+
+  ostatni = w;
+  $('#l-wystapien').textContent = w.wystapien;
+  $('#l-roznych').textContent = w.roznych;
+  $('#l-slow').textContent = w.slow.toLocaleString('pl');
+  $('#info').textContent = plik.name + ' · rozpoznany format: ' + w.format.toUpperCase();
+  $('#przed').innerHTML = podswietl(w.oryginal, w.znika);
+  $('#po').innerHTML = pokazEtykiety(w.oczyszczony);
+  $('#lista').innerHTML = w.znika.map(z =>
+    `<tr><td><span class="typ">${uciekaj(z.typ)}</span></td>
+     <td>${uciekaj(z.tekst.length>90 ? z.tekst.slice(0,90)+'…' : z.tekst)}</td>
+     <td style="text-align:right">${z.ile}</td></tr>`).join('');
+  $('#wynik').classList.remove('schowane');
+}
+
+const upusc = $('#upusc');
+upusc.addEventListener('click', () => $('#plik').click());
+$('#plik').addEventListener('change', e => e.target.files[0] && wyslij(e.target.files[0]));
+['dragenter','dragover'].forEach(z => upusc.addEventListener(z, e => {
+  e.preventDefault(); upusc.classList.add('nad'); }));
+['dragleave','drop'].forEach(z => upusc.addEventListener(z, e => {
+  e.preventDefault(); upusc.classList.remove('nad'); }));
+upusc.addEventListener('drop', e => e.dataTransfer.files[0] && wyslij(e.dataTransfer.files[0]));
+
+$('#pobierz-czysty').addEventListener('click', () =>
+  ostatni && pobierz(ostatni.nazwa+'-anon.txt', ostatni.oczyszczony, 'text/plain'));
+$('#pobierz-klucz').addEventListener('click', () =>
+  ostatni && pobierz(ostatni.nazwa+'-anon-klucz.json',
+    JSON.stringify(ostatni.slownik, null, 2), 'application/json'));
+</script>
+</body>
+</html>

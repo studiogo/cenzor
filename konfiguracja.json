@@ -1,0 +1,35 @@
+{
+  "encje": [
+    "PERSON",
+    "ORGANIZATION",
+    "LOCATION",
+    "EMAIL_ADDRESS",
+    "PHONE_NUMBER",
+    "CREDIT_CARD",
+    "IP_ADDRESS",
+    "US_SSN",
+    "US_ITIN",
+    "US_PASSPORT",
+    "US_DRIVER_LICENSE",
+    "US_BANK_NUMBER",
+    "IBAN_CODE",
+    "MEDICAL_LICENSE",
+    "UK_NHS",
+    "CRYPTO",
+    "MAC_ADDRESS",
+    "URL",
+    "PL_PESEL"
+  ],
+  "nie_ruszaj": [
+    "Sp. z o.o.",
+    "S.A.",
+    "Urzad Miasta",
+    "Ministerstwo",
+    "API",
+    "CRM",
+    "RODO"
+  ],
+  "prog_pewnosci": 0.4,
+  "jezyk": "en",
+  "_uwaga": "nie_ruszaj: nazwy, ktore maja zostac jawne. Wlasne wpisz w konfiguracja.lokalna.json (plik nie idzie do repozytorium)."
+}
