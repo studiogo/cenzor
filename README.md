@@ -37,6 +37,7 @@ Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.
 git clone https://github.com/studiogo/cenzor.git
 cd cenzor
 ./instaluj.sh
+venv/bin/python okno/serwer.py
 ```
 
 **Windows** — w PowerShellu (Start → wpisz „PowerShell"):
@@ -45,20 +46,35 @@ cd cenzor
 git clone https://github.com/studiogo/cenzor.git
 cd cenzor
 powershell -ExecutionPolicy Bypass -File .\instaluj.ps1
+venv\Scripts\python okno\serwer.py
 ```
 
-Pythona na Windowsa pobierz z [python.org](https://www.python.org/downloads/)
-i przy instalacji zaznacz „Add python.exe to PATH". Jeśli nie masz gita, pobierz
-repozytorium jako ZIP (zielony przycisk „Code" u góry strony), rozpakuj i w tym
-katalogu uruchom samą ostatnią linijkę.
+Trzecia linijka pobiera model języka polskiego (574 MB), więc chwilę to trwa.
+Ostatnia otwiera okno narzędzia w przeglądarce — o nim niżej.
 
-Ostatni krok pobiera model języka polskiego (574 MB), więc chwilę to trwa.
+### Windows: dwie rzeczy, które potrafią stanąć na drodze
+
+**Nie masz gita.** Pierwsza linijka wtedy nie zadziała. Wejdź na
+[stronę repozytorium](https://github.com/studiogo/cenzor), kliknij zielony przycisk
+„Code", wybierz „Download ZIP" i rozpakuj pobrany plik — powstanie katalog
+`cenzor-main`. Otwórz go w Eksploratorze plików, kliknij pasek adresu u góry,
+wpisz `powershell` i naciśnij Enter. PowerShell otworzy się już w tym katalogu,
+więc dwie pierwsze linijki pomijasz i zaczynasz od trzeciej.
+
+**Wpisujesz `python`, a otwiera się Sklep Windows.** To znaczy, że Pythona nie ma
+— Windows podstawia pod tę nazwę skrót do sklepu. Pobierz Pythona z
+[python.org](https://www.python.org/downloads/), przy instalacji zaznacz
+„Add python.exe to PATH", zamknij PowerShell, otwórz go na nowo i uruchom
+instalator jeszcze raz. Wersji ze sklepu nie instaluj. Sam instalator sprawdza
+kandydatów na Pythona, uruchamiając każdego z nich, więc skrót do sklepu odrzuca
+i szuka dalej — zaczyna od uruchamiacza `py`, który python.org dokłada zawsze.
 
 ## Pierwsze uruchomienie
 
 ![Okno narzędzia: po lewej dokument z podświetlonymi danymi, po prawej ta sama treść z etykietami zamiast nazwisk, pod spodem lista tego, co znika](docs/obrazki/okno.jpg)
 
-Okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:
+Ostatnia linijka z instalacji otwiera okno w przeglądarce — przeciągasz plik,
+widzisz, co zniknie, pobierasz wynik. Kolejne razy uruchamiasz je tak samo:
 
 ```bash
 venv/bin/python okno/serwer.py                # Mac i Linux
