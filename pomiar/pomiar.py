@@ -14,7 +14,8 @@ from pathlib import Path
 
 KAT = Path(__file__).resolve().parent
 SKILL = KAT.parent
-PYTHON = str(SKILL / "venv" / "bin" / "python")
+# Windows trzyma Pythona ze srodowiska w venv\Scripts, Mac i Linux w venv/bin.
+PYTHON = str(SKILL / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python"))
 SKRYPT = str(SKILL / "bin" / "anonimizuj.py")
 
 IMIONA = {w for w in (KAT / "imiona.txt").read_text(encoding="utf-8").split() if w}

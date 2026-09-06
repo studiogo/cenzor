@@ -1,5 +1,18 @@
 # Historia zmian
 
+## Niewydane
+
+- Instalator dla Windowsa: `instaluj.ps1`. Sam znajduje Pythona 3.10+, stawia
+  środowisko, instaluje biblioteki i pobiera model języka
+- Osobne polecenia dla Windowsa w README i na stronie projektu (`venv\Scripts\python`)
+- Słownik podmian na Windowsie dostępny tylko dla zalogowanego użytkownika, tak jak
+  prawa 600 na Macu i Linuksie
+- Wyjście programu zawsze w UTF-8, także przekierowane do pliku na Windowsie —
+  polskie litery w nazwisku albo w ścieżce nie wywracają już programu
+- Skrypty pomiaru znajdują Pythona ze środowiska także na Windowsie
+- Testy na GitHubie uruchamiają się też na Windowsie: instalatorem, a potem próbą
+  wycięcia i odwrócenia na przykładzie
+
 ## 0.1.0 — 4 września 2026
 
 Pierwsze wydanie.

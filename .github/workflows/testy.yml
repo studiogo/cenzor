@@ -2,6 +2,10 @@ name: testy
 
 # Strażnik uruchamiany przy każdej zmianie: sprawdza, czy narzędzie nadal
 # wycina to, co ma wycinać, i nie rusza kwot ani dat.
+#
+# Dwa systemy: Linux (jak na Macu) i Windows. Na Windowsie instalujemy
+# instalatorem instaluj.ps1, bo nie mamy własnej maszyny z Windowsem — to jedyne
+# miejsce, gdzie ten instalator jest sprawdzany naprawdę.
 on:
   push:
     branches: [main]
@@ -9,7 +13,11 @@ on:
 
 jobs:
   testy:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
 
@@ -17,11 +25,36 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Instaluję biblioteki i model języka polskiego
+      - name: Instaluję biblioteki i model języka polskiego (Linux)
+        if: runner.os != 'Windows'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
           python -m spacy download pl_core_news_lg
 
-      - name: Uruchamiam testy
+      - name: Instaluję instalatorem dla Windowsa (instaluj.ps1)
+        if: runner.os == 'Windows'
+        run: powershell -ExecutionPolicy Bypass -File .\instaluj.ps1
+
+      - name: Uruchamiam testy (Linux)
+        if: runner.os != 'Windows'
         run: python -m pytest test/ -q
+
+      - name: Uruchamiam testy (Windows, Pythonem ze środowiska)
+        if: runner.os == 'Windows'
+        run: venv\Scripts\python -m pytest test/ -q
+
+      # Próba na przykładzie: wycięcie, odwrócenie i porównanie z oryginałem.
+      # Wyjście idzie do pliku, nie na ekran — na Windowsie to właśnie wtedy
+      # polskie litery potrafią wywrócić program.
+      - name: Wycinam i odwracam na przykładzie
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then PY=venv/Scripts/python; else PY=python; fi
+          P=pomiar/przyklady/01-wniosek-urzedowy
+          $PY bin/anonimizuj.py $P.txt --jezyk pl --podglad > podglad.txt
+          cat podglad.txt
+          grep -q "Znaleziono" podglad.txt
+          $PY bin/anonimizuj.py $P.txt --jezyk pl
+          $PY bin/odwroc.py $P-anon.txt $P-anon-slownik.json
+          diff --strip-trailing-cr $P.txt $P-anon-odtworzony.txt && echo "Odtworzony co do znaku."

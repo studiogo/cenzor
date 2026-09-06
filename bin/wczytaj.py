@@ -51,7 +51,8 @@ def _odt(sciezka):
 
 
 def _rodzaj(sciezka):
-    naglowek = sciezka.open("rb").read(8)
+    with sciezka.open("rb") as f:       # zamkniete od razu — Windows nie skasuje otwartego pliku
+        naglowek = f.read(8)
     if naglowek.startswith(b"%PDF"):
         return "pdf"
     if naglowek.startswith(b"PK"):          # DOCX i ODT to spakowane katalogi

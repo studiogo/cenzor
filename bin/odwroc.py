@@ -5,6 +5,11 @@ from pathlib import Path
 
 
 def main():
+    # Windows zapisuje wyjscie przekierowane do pliku w cp1250 — polska litera
+    # w sciezce wywraca wtedy program. Na Macu i Linuksie to nic nie zmienia.
+    for strumien in (sys.stdout, sys.stderr):
+        if hasattr(strumien, "reconfigure"):
+            strumien.reconfigure(encoding="utf-8", errors="replace")
     p = argparse.ArgumentParser(description="Odwraca anonimizacje wedlug slownika.")
     p.add_argument("plik", help="tekst z etykietami")
     p.add_argument("slownik", help="plik -slownik.json z anonimizacji")

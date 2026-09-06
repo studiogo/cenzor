@@ -382,7 +382,36 @@ def podmien(tekst, trafienia):
     return "".join(czesci), slownik
 
 
+def konsola_utf8():
+    """Windows zapisuje wyjscie przekierowane do pliku w kodowaniu cp1250 — polskie
+    litery w nazwisku albo w sciezce wywracaja wtedy program. Wymuszamy UTF-8.
+    Na Macu i Linuksie to nic nie zmienia."""
+    for strumien in (sys.stdout, sys.stderr):
+        if hasattr(strumien, "reconfigure"):
+            strumien.reconfigure(encoding="utf-8", errors="replace")
+
+
+def zabezpiecz(plik):
+    """Slownik ma czytac tylko jego wlasciciel.
+    Mac i Linux: prawa 600. Windows nie zna takich praw — tam odcinamy
+    uprawnienia dziedziczone z katalogu i zostawiamy dostep tylko zalogowanemu
+    uzytkownikowi (icacls). Gdy sie nie uda, mowimy o tym, zamiast udawac."""
+    if os.name != "nt":
+        os.chmod(plik, 0o600)
+        return
+    import subprocess
+    uzytkownik = os.environ.get("USERNAME")
+    if not uzytkownik:
+        print("Uwaga: nie znam nazwy uzytkownika, slownik ma zwykle uprawnienia.", file=sys.stderr)
+        return
+    wynik = subprocess.run(["icacls", str(plik), "/inheritance:r", "/grant:r", f"{uzytkownik}:F"],
+                           capture_output=True)
+    if wynik.returncode != 0:
+        print("Uwaga: nie udalo sie ograniczyc dostepu do slownika tylko do Ciebie.", file=sys.stderr)
+
+
 def main():
+    konsola_utf8()
     p = argparse.ArgumentParser(description="Wycina dane osobowe z pliku tekstowego.")
     p.add_argument("plik", help="plik wejsciowy")
     p.add_argument("-o", "--wyjscie", help="plik wynikowy (domyslnie <nazwa>-anon.txt)")
@@ -426,7 +455,7 @@ def main():
 
     wyjscie.write_text(czysty, encoding="utf-8")
     plik_slownika.write_text(json.dumps(slownik, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.chmod(plik_slownika, 0o600)
+    zabezpiecz(plik_slownika)
 
     print(f"Wyciete: {len(trafienia)} wystapien, {len(slownik)} roznych rzeczy.")
     print(f"Do wyslania: {wyjscie}")

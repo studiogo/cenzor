@@ -96,11 +96,20 @@ class Uchwyt(BaseHTTPRequestHandler):
 
 
 def main():
+    # Windows zapisuje wyjscie przekierowane do pliku w cp1250 — polska litera
+    # w sciezce wywraca wtedy program. Na Macu i Linuksie to nic nie zmienia.
+    for strumien in (sys.stdout, sys.stderr):
+        if hasattr(strumien, "reconfigure"):
+            strumien.reconfigure(encoding="utf-8", errors="replace")
     try:
         serwer = HTTPServer((ADRES, PORT), Uchwyt)
     except OSError as e:
-        sys.exit(f"Nie moge zajac portu {PORT} na {ADRES}: {e}\n"
-                 f"Zmien port: ANONIMIZUJ_PORT=8080 python3 {__file__}")
+        if os.name == "nt":
+            rada = (f"Zmien port. W PowerShellu:  $env:ANONIMIZUJ_PORT=8080; python {__file__}\n"
+                    f"            w cmd:         set ANONIMIZUJ_PORT=8080 && python {__file__}")
+        else:
+            rada = f"Zmien port: ANONIMIZUJ_PORT=8080 python3 {__file__}"
+        sys.exit(f"Nie moge zajac portu {PORT} na {ADRES}: {e}\n{rada}")
     adres = f"http://{ADRES}:{PORT}"
     print(f"Okno dziala pod adresem {adres}")
     print("Slucha tylko na tym komputerze. Zeby zamknac: Ctrl+C")

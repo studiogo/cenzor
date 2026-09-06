@@ -31,11 +31,26 @@ programować — jest okno w przeglądarce, do którego przeciągasz plik myszk�
 
 Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.
 
+**Mac i Linux** — w terminalu:
+
 ```bash
 git clone https://github.com/studiogo/cenzor.git
 cd cenzor
 ./instaluj.sh
 ```
+
+**Windows** — w PowerShellu (Start → wpisz „PowerShell"):
+
+```powershell
+git clone https://github.com/studiogo/cenzor.git
+cd cenzor
+powershell -ExecutionPolicy Bypass -File .\instaluj.ps1
+```
+
+Pythona na Windowsa pobierz z [python.org](https://www.python.org/downloads/)
+i przy instalacji zaznacz „Add python.exe to PATH". Jeśli nie masz gita, pobierz
+repozytorium jako ZIP (zielony przycisk „Code" u góry strony), rozpakuj i w tym
+katalogu uruchom samą ostatnią linijkę.
 
 Ostatni krok pobiera model języka polskiego (574 MB), więc chwilę to trwa.
 
@@ -46,7 +61,11 @@ Ostatni krok pobiera model języka polskiego (574 MB), więc chwilę to trwa.
 Okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:
 
 ```bash
-venv/bin/python okno/serwer.py
+venv/bin/python okno/serwer.py                # Mac i Linux
+```
+
+```powershell
+venv\Scripts\python okno\serwer.py            # Windows
 ```
 
 Otworzy się `http://127.0.0.1:8765`. Serwer słucha wyłącznie na Twoim komputerze
@@ -58,6 +77,14 @@ Wiersz poleceń, jeśli wolisz:
 venv/bin/python bin/anonimizuj.py umowa.pdf --jezyk pl --podglad   # co zniknie
 venv/bin/python bin/anonimizuj.py umowa.pdf --jezyk pl             # wytnij
 venv/bin/python bin/odwroc.py odpowiedz.txt umowa-anon-slownik.json
+```
+
+Na Windowsie te same polecenia, tylko Python leży gdzie indziej:
+
+```powershell
+venv\Scripts\python bin\anonimizuj.py umowa.pdf --jezyk pl --podglad
+venv\Scripts\python bin\anonimizuj.py umowa.pdf --jezyk pl
+venv\Scripts\python bin\odwroc.py odpowiedz.txt umowa-anon-slownik.json
 ```
 
 ## Co rozpoznaje
@@ -121,13 +148,18 @@ Dokumentów nie ma w repozytorium: są w nich nazwiska prawdziwych ludzi.
 ## Sprawdź, czy nic nie jest zepsute
 
 ```bash
-venv/bin/python -m pytest test/ -q
+venv/bin/python -m pytest test/ -q            # Mac i Linux
+```
+
+```powershell
+venv\Scripts\python -m pytest test/ -q        # Windows
 ```
 
 33 sprawdzenia: czy sumy kontrolne odsiewają podrobione numery, czy każdy rodzaj
 numeru znika ze zdania, czy kwota i data **zostają** nietknięte, i czy z pliku
 z kluczem da się odtworzyć oryginał co do znaku. Te same testy uruchamiają się
-same przy każdej zmianie w repozytorium.
+same przy każdej zmianie w repozytorium, na Linuksie i na Windowsie — na Windowsie
+razem z instalatorem i próbą wycięcia na przykładzie.
 
 ## Jak wypadamy na tle innego polskiego narzędzia
 
@@ -179,7 +211,8 @@ Sześć warstw, dwa niezależne wykrywacze i bramka, która rozstrzyga ich spory
 ## Użycie z Claude Code
 
 Repozytorium jest jednocześnie wtyczką. Skopiuj katalog do `~/.claude/skills/`
-i powiedz agentowi „zanonimizuj ten plik".
+(na Windowsie: `%USERPROFILE%\.claude\skills\`) i powiedz agentowi „zanonimizuj
+ten plik".
 
 ## Licencja
 

@@ -154,7 +154,7 @@ def main():
             e = A.ETYKIETY.get(typ, typ)
             if e in interesujace:
                 licznik[e].append(fragment)
-    slow = sum(len(f.read_text(errors="replace").split()) for f in pliki)
+    slow = sum(len(f.read_text(encoding="utf-8", errors="replace").split()) for f in pliki)
     print(f"  dokumentow: {len(pliki)}, slow: {slow}")
     for e in sorted(interesujace):
         ile = len(licznik[e])

@@ -61,6 +61,7 @@ pre.polecenia{
   background:var(--kod);border:1px solid var(--ramka);border-radius:10px;padding:16px 18px;
   overflow-x:auto;font:13.5px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0 0 16px;
 }
+pre.polecenia .komentarz{color:var(--przygaszony)}
 ul{padding-left:22px;margin:0 0 16px}
 li{margin-bottom:8px;max-width:64ch}
 .uwaga{
@@ -149,11 +150,20 @@ footer a{color:var(--przygaszony)}
 
   <h2>Jak zacząć</h2>
   <p>Potrzebujesz Pythona 3.10 lub nowszego. Reszta instaluje się sama.</p>
+  <h3>Mac i Linux</h3>
 <pre class="polecenia">git clone https://github.com/studiogo/cenzor.git
 cd cenzor
 ./instaluj.sh</pre>
+  <h3>Windows</h3>
+  <p>W PowerShellu (Start → wpisz „PowerShell"). Pythona pobierz z
+  <a href="https://www.python.org/downloads/">python.org</a> i przy instalacji zaznacz
+  „Add python.exe to PATH".</p>
+<pre class="polecenia">git clone https://github.com/studiogo/cenzor.git
+cd cenzor
+powershell -ExecutionPolicy Bypass -File .\instaluj.ps1</pre>
   <p>Potem okno w przeglądarce — przeciągasz plik, widzisz, co zniknie, pobierasz wynik:</p>
-<pre class="polecenia">venv/bin/python okno/serwer.py</pre>
+<pre class="polecenia">venv/bin/python okno/serwer.py          <span class="komentarz"># Mac i Linux</span>
+venv\Scripts\python okno\serwer.py      <span class="komentarz"># Windows</span></pre>
 
   <div class="uwaga">
     <p>Okno słucha wyłącznie na Twoim komputerze i nie da się go wystawić na sieć.

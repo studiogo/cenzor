@@ -10,13 +10,14 @@ Liczymy tez nadmiar: ile fragmentow wycieto, choc model nie uznal ich za osobe.
 
     python3 kontrola.py <katalog-z-dokumentami>
 """
-import json, re, subprocess, sys
+import json, os, re, subprocess, sys
 from datetime import date
 from pathlib import Path
 
 KAT = Path(__file__).resolve().parent
 SKILL = KAT.parent
-PYTHON = str(SKILL / "venv" / "bin" / "python")
+# Windows trzyma Pythona ze srodowiska w venv\Scripts, Mac i Linux w venv/bin.
+PYTHON = str(SKILL / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python"))
 
 KOD = r'''
 import json, subprocess, sys
